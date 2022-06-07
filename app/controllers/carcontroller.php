@@ -36,10 +36,11 @@ class CarController extends Controller
         $this->respond($cars);
     }
 
-    public function getAllCarsByUserId($userId) {
+    public function getAllCarsByUserId($userId)
+    {
         $jwt = $this->checkToken();
-        if (!$jwt) 
-            return;        
+        if (!$jwt)
+            return;
 
         $offset = NULL;
         $limit = NULL;
@@ -73,12 +74,43 @@ class CarController extends Controller
     {
         $car = $this->createObjectFromPostedJson("Models\\Car");
 
-        if ($car->registrationNumber == null) {
-            $this->respondWithError(406, "Show this message too");
+        if (!$car->registrationNumber) {
+            $this->respondWithError(422, "Please fill out registration number!");
+            return;
         }
-        
+
+        if (!$car->brand) {
+            $this->respondWithError(422, "Please fill out the brand");
+            return;
+        }
+
+        if (!$car->model) {
+            $this->respondWithError(422, "Please fill out the model");
+            return;
+        }
+
+        if (!$car->year) {
+            $this->respondWithError(422, "Please fill out the year");
+            return;
+        }
+
+        if (!$car->price) {
+            $this->respondWithError(422, "Please fill out the price");
+            return;
+        }
+
+        if (!$car->categoryId) {
+            $this->respondWithError(422, "Please fill out the image category");
+            return;
+        }
+
+        if (!$car->image) {
+            $this->respondWithError(422, "Please fill out the image url");
+            return;
+        }
+
         try {
-            
+
             $car = $this->carService->createCar($car);
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
@@ -88,9 +120,46 @@ class CarController extends Controller
     }
 
     public function updateCar($id)
-    {
+    {   
+        $car = $this->createObjectFromPostedJson("Models\\Car");
+        
+        if (!$car->registrationNumber) {
+            $this->respondWithError(422, "Please fill out registration number!");
+            return;
+        }
+
+        if (!$car->brand) {
+            $this->respondWithError(422, "Please fill out the brand");
+            return;
+        }
+
+        if (!$car->model) {
+            $this->respondWithError(422, "Please fill out the model");
+            return;
+        }
+
+        if (!$car->year) {
+            $this->respondWithError(422, "Please fill out the year");
+            return;
+        }
+
+        if (!$car->price) {
+            $this->respondWithError(422, "Please fill out the price");
+            return;
+        }
+
+        if (!$car->categoryId) {
+            $this->respondWithError(422, "Please fill out the image category");
+            return;
+        }
+
+        if (!$car->image) {
+            $this->respondWithError(422, "Please fill out the image url");
+            return;
+        }
+
         try {
-            $car = $this->createObjectFromPostedJson("Models\\Car");
+
             $car = $this->carService->updateCar($car, $id);
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
@@ -104,7 +173,6 @@ class CarController extends Controller
         try {
 
             $this->carService->deleteCar($id);
-
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
         }

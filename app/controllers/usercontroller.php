@@ -23,8 +23,18 @@ class UserController extends Controller
 
             $user = $this->userService->authenticateUser($postedUser->username, $postedUser->password);
 
-            if(!$user) {
 
+            if (!$postedUser->username) {
+                $this->respondWithError(422, "Please fill out the username!");
+                return;
+            }
+
+            if (!$postedUser->password) {
+                $this->respondWithError(422, "Please fill out the password!");
+                return;
+            }
+
+            if(!$user) {
                 $this->respondWithError(401, "Invalid credentials");
                 return;
             }
