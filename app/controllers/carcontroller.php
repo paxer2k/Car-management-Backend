@@ -79,6 +79,7 @@ class CarController extends Controller
             return;
         }
 
+
         if (!$car->brand) {
             $this->respondWithError(422, "Please fill out the brand");
             return;
