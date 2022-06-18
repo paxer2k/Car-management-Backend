@@ -17,9 +17,9 @@ class CarController extends Controller
 
     public function getAllCars()
     {
-        // $jwt = $this->checkToken();
-        // if (!$jwt) 
-        //     return;        
+        $jwt = $this->checkToken();
+        if (!$jwt) 
+            return;        
 
         $offset = NULL;
         $limit = NULL;
@@ -59,6 +59,10 @@ class CarController extends Controller
 
     public function getCarById($id)
     {
+        $jwt = $this->checkToken();
+        if (!$jwt)
+            return;
+
         $car = $this->carService->getCarById($id);
 
         // we might need some kind of error checking that returns a 404 if the product is not found in the DB
@@ -72,6 +76,10 @@ class CarController extends Controller
 
     public function createCar()
     {
+        $jwt = $this->checkToken();
+        if (!$jwt)
+            return;
+
         $car = $this->createObjectFromPostedJson("Models\\Car");
 
         if (!$car->registrationNumber) {
@@ -122,6 +130,10 @@ class CarController extends Controller
 
     public function updateCar($id)
     {   
+        $jwt = $this->checkToken();
+        if (!$jwt)
+            return;
+
         $car = $this->createObjectFromPostedJson("Models\\Car");
         
         if (!$car->registrationNumber) {
@@ -171,6 +183,10 @@ class CarController extends Controller
 
     public function deleteCar($id)
     {
+        $jwt = $this->checkToken();
+        if (!$jwt)
+            return;
+            
         try {
 
             $this->carService->deleteCar($id);
